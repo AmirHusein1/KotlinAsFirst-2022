@@ -152,15 +152,21 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
         0
     } else if (a > d || c > b) {
         -1
+    } else if (a == c && b == d) {
+        d - c
     } else {
-        if (d > b && b > c && d > a && c > a) {
+        if (d > b && c > a) {
             b - c
-        } else if (a > c && a < d && b > c && b > d) {
+        } else if (a > c && b > d) {
             d - a
-        } else if (c > a && b > c && d > a && b >= d) {
-            d -c
-        } else {
+        } else if (c >= a && b > d) {
+            d - c
+        } else if (c >= a && d > b) {
+            b - c
+        } else if (c < a) {
             b - a
+        } else {
+            b - c
         }
     }
 }
