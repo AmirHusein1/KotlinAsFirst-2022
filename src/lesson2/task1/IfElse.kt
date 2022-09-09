@@ -3,7 +3,10 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
+import kotlin.math.abs
 import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sqrt
 
 // Урок 2: ветвления (здесь), логический тип (см. 2.2).
@@ -122,7 +125,19 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    return if (a + b > c && a + c > b && b + c > a) {
+        if (sqr(a) == sqr(b) + sqr(c) || sqr(b) == sqr(a) + sqr(c) || sqr(c) == sqr(a) + sqr(b)) {
+            1
+        } else if (sqr(a) < sqr(b) + sqr(c) && sqr(b) < sqr(a) + sqr(c) && sqr(c) < sqr(a) + sqr(b)) {
+            0
+        } else {
+            2
+        }
+    } else {
+        -1
+    }
+}
 
 /**
  * Средняя (3 балла)
@@ -132,4 +147,20 @@ fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
+    return if (c == b || a == d) {
+        0
+    } else if (a > d || c > b) {
+        -1
+    } else {
+        if (d > b && b > c && d > a && c > a) {
+            b - c
+        } else if (a > c && a < d && b > c && b > d) {
+            d - a
+        } else if (c > a && b > c && d > a && b >= d) {
+            d -c
+        } else {
+            b - a
+        }
+    }
+}

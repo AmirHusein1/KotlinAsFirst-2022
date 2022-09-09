@@ -53,7 +53,7 @@ fun quadraticRootProduct(a: Double, b: Double, c: Double): Double {
  * Пример главной функции
  */
 fun main() {
-    val x1x2 = trackLength(3.0, 0.0, 0.0, 4.0)
+    val x1x2 = lengthInMeters(8, 2, 11)
     println("Root product: $x1x2")
 }
 
@@ -74,7 +74,8 @@ fun seconds(hours: Int, minutes: Int, seconds: Int): Int = hours * 3600 + minute
  * Определить длину того же отрезка в метрах (в данном случае 18.98).
  * 1 сажень = 3 аршина = 48 вершков, 1 вершок = 4.445 см.
  */
-fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double = (sagenes * 48 + arshins * 16 + vershoks) * 4.445
+fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double =
+    (sagenes * 48 + arshins * 16 + vershoks) * 0.04445
 
 /**
  * Тривиальная (1 балл)
@@ -82,9 +83,8 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double = (sagenes
  * Пользователь задает угол в градусах, минутах и секундах (например, 36 градусов 14 минут 35 секунд).
  * Вывести значение того же угла в радианах (например, 0.63256).
  */
-fun angleInRadian(deg: Int, min: Int, sec: Int): Double {
-    return (deg.toDouble() + (min.toDouble() / 60) + (sec.toDouble() / 3600)) * PI / 180
-}
+fun angleInRadian(deg: Int, min: Int, sec: Int): Double =
+    (deg.toDouble() + (min.toDouble() / 60) + (sec.toDouble() / 3600)) * PI / 180
 
 /**
  * Тривиальная (1 балл)
