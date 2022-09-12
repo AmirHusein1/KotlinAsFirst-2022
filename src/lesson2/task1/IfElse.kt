@@ -125,18 +125,16 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int {
-    return if (a + b > c && a + c > b && b + c > a) {
-        if (sqr(a) == sqr(b) + sqr(c) || sqr(b) == sqr(a) + sqr(c) || sqr(c) == sqr(a) + sqr(b)) {
-            1
-        } else if (sqr(a) < sqr(b) + sqr(c) && sqr(b) < sqr(a) + sqr(c) && sqr(c) < sqr(a) + sqr(b)) {
-            0
-        } else {
-            2
-        }
+fun triangleKind(a: Double, b: Double, c: Double): Int = if (a + b > c && a + c > b && b + c > a) {
+    if (sqr(a) == sqr(b) + sqr(c) || sqr(b) == sqr(a) + sqr(c) || sqr(c) == sqr(a) + sqr(b)) {
+        1
+    } else if (sqr(a) < sqr(b) + sqr(c) && sqr(b) < sqr(a) + sqr(c) && sqr(c) < sqr(a) + sqr(b)) {
+        0
     } else {
-        -1
+        2
     }
+} else {
+    -1
 }
 
 /**
