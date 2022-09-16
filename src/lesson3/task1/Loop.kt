@@ -2,7 +2,7 @@
 
 package lesson3.task1
 
-import kotlin.math.sqrt
+import kotlin.math.*
 
 // Урок 3: циклы
 // Максимальное количество баллов = 9
@@ -72,7 +72,15 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun digitNumber(n: Int): Int = TODO()
+fun digitNumber(n: Int): Int {
+    var p = 1
+    var l = n
+    while (l / 10 != 0) {
+        l /= 10
+        p++
+    }
+    return p
+}
 
 /**
  * Простая (2 балла)
@@ -181,7 +189,23 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+fun cos(x: Double, eps: Double): Double {
+    var n = 1
+    var p = 1.0
+    var sum = p
+    val l = x % (2 * PI)
+    while (abs(p) > abs(eps)) {
+        val a = 2 * n
+        var fuc = 1.0
+        for (i in 1..a) {
+            fuc *= i
+        }
+        p = (((-1.0).pow(n)) * (l.pow(a))) / (fuc)
+        sum += p
+        n++
+    }
+    return sum
+}
 
 /**
  * Сложная (4 балла)
@@ -203,4 +227,40 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var k = 2
+    var x0 = 1
+    var x1 = 1
+    var x2: Int
+    while (k < n) {
+        x2 = x0 + x1
+        x0 = x1
+        x1 = x2
+        var co = x2
+        k++
+        if (k == n) {
+            while (co / 10 != 0) {
+                co /= 10
+            }
+            return co
+        }
+        var b = 0
+        while (floor(co.toDouble() / 10).toInt() != 0) {
+            co = floor(co.toDouble() / 10).toInt()
+            b++
+            k++
+            if (k == n) {
+                var d = x2
+                val a = digitNumber(x2)
+                val c = a - b
+                var y = 1
+                while (y < c) {
+                    d /= 10
+                    y++
+                }
+                return d % 10
+            }
+        }
+    }
+    return 1
+}
