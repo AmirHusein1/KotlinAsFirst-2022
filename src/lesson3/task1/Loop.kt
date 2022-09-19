@@ -196,11 +196,8 @@ fun cos(x: Double, eps: Double): Double {
     val l = x % (2 * PI)
     while (abs(p) > abs(eps)) {
         val a = 2 * n
-        var fuc = 1.0
-        for (i in 1..a) {
-            fuc *= i
-        }
-        p = (((-1.0).pow(n)) * (l.pow(a))) / (fuc)
+        val fuc = factorial(a)
+        p = (-1.0).pow(n) * l.pow(a) / fuc
         sum += p
         n++
     }
