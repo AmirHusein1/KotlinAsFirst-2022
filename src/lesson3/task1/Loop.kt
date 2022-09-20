@@ -234,15 +234,8 @@ fun fibSequenceDigit(n: Int): Int {
         x0 = x1
         x1 = x2
         var co = x2
-        k++
-        if (k == n) {
-            while (co / 10 != 0) {
-                co /= 10
-            }
-            return co
-        }
         var b = 0
-        while (floor(co.toDouble() / 10).toInt() != 0) {
+        while (co != 0) {
             co = floor(co.toDouble() / 10).toInt()
             b++
             k++
@@ -250,7 +243,7 @@ fun fibSequenceDigit(n: Int): Int {
                 var d = x2
                 val a = digitNumber(x2)
                 val c = a - b
-                var y = 1
+                var y = 0
                 while (y < c) {
                     d /= 10
                     y++
