@@ -233,23 +233,14 @@ fun fibSequenceDigit(n: Int): Int {
         x2 = x0 + x1
         x0 = x1
         x1 = x2
-        var co = x2
-        var b = 0
-        while (co != 0) {
-            co = floor(co.toDouble() / 10).toInt()
-            b++
-            k++
-            if (k == n) {
-                var d = x2
-                val a = digitNumber(x2)
-                val c = a - b
-                var y = 0
-                while (y < c) {
-                    d /= 10
-                    y++
-                }
-                return d % 10
+        k += digitNumber(x2)
+        if (k >= n) {
+            var c = k - n
+            while (c > 0) {
+                x2 /= 10
+                c--
             }
+            return x2 % 10
         }
     }
     return 1
