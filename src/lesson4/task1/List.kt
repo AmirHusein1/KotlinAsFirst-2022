@@ -241,7 +241,80 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val m = mutableListOf<String>()
+    val l = n / 1000
+    for (i in 1..l) {
+        m.add("M")
+    }
+    when (val p = n % 1000 / 100) {
+        in 1..3 -> {
+            for (i in 1..p) {
+                m.add("C")
+            }
+        }
+
+        4 -> {
+            m.add("CD")
+        }
+
+        in 5..8 -> {
+            m.add("D")
+            for (i in 6..p) {
+                m.add("C")
+            }
+        }
+
+        9 -> {
+            m.add("CM")
+        }
+    }
+    when (val o = n % 1000 % 100 / 10) {
+        in 1..3 -> {
+            for (i in 1..o) {
+                m.add("X")
+            }
+        }
+
+        4 -> {
+            m.add("XL")
+        }
+
+        in 5..8 -> {
+            m.add("L")
+            for (i in 6..o) {
+                m.add("X")
+            }
+        }
+
+        9 -> {
+            m.add("XC")
+        }
+    }
+    when (val r = n % 10) {
+        in 1..3 -> {
+            for (i in 1..r) {
+                m.add("I")
+            }
+        }
+
+        4 -> {
+            m.add("IV")
+        }
+
+        in 5..8 -> {
+            m.add("V")
+            for (i in 6..r) {
+                m.add("I")
+            }
+        }
+
+        9 -> {
+            m.add("IX")
+        }
+    }
+    return m.joinToString("")
+}
 
 /**
  * Очень сложная (7 баллов)
@@ -250,4 +323,119 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun main() {
+    val x1x2 = russian(1434)
+    println(x1x2)
+}
+
+fun russian(n: Int): String {
+    val firstList = listOf("", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+    val secondList = listOf("", "одна", "две", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+    val teens = listOf(
+        "десять",
+        "одиннадцать",
+        "двенадцать",
+        "тринадцать",
+        "четырнадцать",
+        "пятнадцать",
+        "шестнадцать",
+        "семнадцать",
+        "восемндацать",
+        "девятнадцать"
+    )
+    val tens = listOf(
+        "",
+        "двадцать",
+        "тридцать",
+        "сорок",
+        "пятьдесят",
+        "шестьдесят",
+        "семьдесят",
+        "восемьдесят",
+        "девяносто"
+    )
+    val hundreds = listOf(
+        "",
+        "сто",
+        "двести",
+        "триста",
+        "четыреста",
+        "пятьсот",
+        "шестьсот",
+        "семьсот",
+        "восемьсот",
+        "девятьсот"
+    )
+    val a = n / 1000
+    val b = n % 1000
+    val aHundred = a / 100
+    val aTens = a / 10 % 10
+    val aUnits = a % 10
+    val aTeens = a % 100
+    val bHundred = b / 100
+    val bTens = b / 10 % 10
+    val bUnits = b % 10
+    val bTeens = b % 100
+    val aList = mutableListOf<String>()
+    if (a > 0) {
+        if (aHundred in 1..9) {
+            aList.add(hundreds[aHundred])
+        }
+        if (aTeens in 10..19) {
+            aList.add(" ")
+            aList.add(teens[aTeens % 10])
+            aList.add(" тысяч ")
+        } else {
+            if (aTens in 2..9) {
+                aList.add(" ")
+                aList.add(tens[aTens - 1])
+                aList.add(" ")
+            }
+            aList.add(secondList[aUnits])
+            when (aUnits) {
+                in 2..4 -> {
+                    aList.add(" тысячи ")
+                }
+
+                1 -> {
+                    aList.add(" тысяча ")
+                }
+
+                else -> {
+                    aList.add(" тысяч ")
+                }
+            }
+        }
+    }
+    val bList = mutableListOf<String>()
+    if (b > 0) {
+        if (bHundred in 1..9) {
+            bList.add(hundreds[bHundred])
+            bList.add(" ")
+        }
+        if (bTeens in 10..19) {
+            bList.add(teens[bTeens % 10])
+        } else {
+            if (bTens in 2..9) {
+                bList.add(tens[bTens - 1])
+                bList.add(" ")
+            }
+            if (bUnits in 1..9) {
+                bList.add(firstList[bUnits])
+            }
+        }
+    }
+    return (aList.joinToString("").trimStart() + bList.joinToString("").trimEnd()).trim()
+//    if (a > 0) {
+//        if (aHundred in 1..9) {
+//            aList.add(hundreds[aHundred])
+//            aList.add(" ")
+//        }
+//        if (aTens in 2..9) {
+//            aList.add(tens[aTens - 1])
+//        }
+//        if (aUnits in 1..9) {
+//
+//        }
+//    }
+}
