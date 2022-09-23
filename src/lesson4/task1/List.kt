@@ -324,7 +324,7 @@ fun roman(n: Int): String {
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 fun main() {
-    val x1x2 = russian(1434)
+    val x1x2 = russian(601348)
     println(x1x2)
 }
 
@@ -389,9 +389,11 @@ fun russian(n: Int): String {
             if (aTens in 2..9) {
                 aList.add(" ")
                 aList.add(tens[aTens - 1])
-                aList.add(" ")
             }
-            aList.add(secondList[aUnits])
+            if (aUnits in 1..9) {
+                aList.add(" ")
+                aList.add(secondList[aUnits])
+            }
             when (aUnits) {
                 in 2..4 -> {
                     aList.add(" тысячи ")
@@ -426,16 +428,4 @@ fun russian(n: Int): String {
         }
     }
     return (aList.joinToString("").trimStart() + bList.joinToString("").trimEnd()).trim()
-//    if (a > 0) {
-//        if (aHundred in 1..9) {
-//            aList.add(hundreds[aHundred])
-//            aList.add(" ")
-//        }
-//        if (aTens in 2..9) {
-//            aList.add(tens[aTens - 1])
-//        }
-//        if (aUnits in 1..9) {
-//
-//        }
-//    }
 }
