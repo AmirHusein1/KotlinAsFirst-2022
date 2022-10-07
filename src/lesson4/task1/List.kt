@@ -360,17 +360,21 @@ fun russian(n: Int): String {
             }
         }
         if (thousand) {
-            when (units) {
-                in 2..4 -> {
-                    list.add("тысячи")
-                }
+            if (teens in 11..19) {
+                list.add("тысяч")
+            } else {
+                when (units) {
+                    in 2..4 -> {
+                        list.add("тысячи")
+                    }
 
-                1 -> {
-                    list.add("тысяча")
-                }
+                    1 -> {
+                        list.add("тысяча")
+                    }
 
-                else -> {
-                    list.add("тысяч")
+                    else -> {
+                        list.add("тысяч")
+                    }
                 }
             }
         }
