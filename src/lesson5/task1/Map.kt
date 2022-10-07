@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_PARAMETER", "ConvertCallChainIntoSequence")
+@file:Suppress("UNUSED_PARAMETER", "ConvertCallChainIntoSequence", "DEPRECATED_IDENTITY_EQUALS")
 
 package lesson5.task1
 
@@ -277,7 +277,20 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    for (i in list) {
+        val p = list.indexOf(i)
+        for (m in list) {
+            val o = list.indexOf(m)
+            if (o !== p) {
+                if (i + m == number) {
+                    return Pair(minOf(p, o), maxOf(p, o))
+                }
+            }
+        }
+    }
+    return Pair(-1, -1)
+}
 
 /**
  * Очень сложная (8 баллов)
@@ -300,4 +313,15 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val n = treasures.toMutableMap().entries.sortedBy { it.value.second }.reversed()
+    val m = mutableSetOf<String>()
+    var sum = capacity
+    for ((name, pair) in n) {
+        if (pair.first <= sum) {
+            m.add(name)
+            sum -= pair.first
+        }
+    }
+    return m
+}
