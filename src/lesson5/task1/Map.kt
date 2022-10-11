@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import kotlin.math.*
+
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -312,15 +314,46 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
+fun main() {
+    val x1x2 = bagPacking(mapOf("Кубок" to (4 to 2000), "Слиток" to (3 to 5000), "Third" to (2 to 6000)), 5)
+    println(x1x2)
+}
+
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    val n = treasures.toMutableMap().entries.sortedBy { it.value.second }.reversed()
-    val m = mutableSetOf<String>()
+    val p = treasures.values.map { it.second }
+    val m = treasures.values.map { it.first }
+    val n = treasures.keys.toMutableList()
+    val a = mutableSetOf<String>()
+    val arr = Array(treasures.size + 1) { Array(capacity + 1) { 0 } }
     var sum = capacity
-    for ((name, pair) in n) {
-        if (pair.first <= sum) {
-            m.add(name)
-            sum -= pair.first
+    for (i in 1..treasures.size) {
+        for (o in 0..capacity) {
+            if (o >= m[i - 1]) {
+                arr[i][o] = max(arr[i - 1][o], arr[i - 1][o - m[i - 1]] + p[i - 1])
+            } else {
+                arr[i][o] = arr[i - 1][o]
+            }
         }
     }
-    return m
+    var num = treasures.size
+    while (num > 0) {
+        if (arr[num][sum] != arr[num - 1][sum]) {
+            a.add(n[num - 1])
+            sum -= m[num - 1]
+        }
+        num--
+    }
+    return a
+
+//    val n = treasures.toMutableMap().entries.
+//    val n = treasures.toMutableMap().entries.sortedBy { it.value.second }.reversed()
+//    val m = mutableSetOf<String>()
+//    var sum = capacity
+//    for ((name, pair) in n) {
+//        if (pair.first <= sum) {
+//            m.add(name)
+//            sum -= pair.first
+//        }
+//    }
+//    return m
 }
