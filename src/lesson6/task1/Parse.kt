@@ -198,6 +198,9 @@ fun fromRoman(roman: String): Int {
     val s = p.subList(1, p.size - 1)
     try {
         for (i in s.indices) {
+            if (s[i] !in m.keys) {
+                return -1
+            }
             val pres = m[s[i]]
             if (i != s.size - 1) {
                 val next = m[s[i + 1]]
