@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import java.lang.Exception
+
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -162,7 +164,21 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше нуля либо равны нулю.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    return try {
+        val a = description.split(";")
+        val map = mutableMapOf<String, Double>()
+        for (i in a.indices) {
+            val b = a[i].split(" ").toMutableList()
+            b -= ""
+            map[b[0]] = b[1].toDouble()
+        }
+        val z = map.maxBy { it.value }
+        z.key
+    } catch (e: Exception) {
+        ""
+    }
+}
 
 /**
  * Сложная (6 баллов)
@@ -175,7 +191,30 @@ fun mostExpensive(description: String): String = TODO()
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    val m = mapOf("M" to 1000, "D" to 500, "C" to 100, "L" to 50, "X" to 10, "V" to 5, "I" to 1)
+    var num = 0
+    val p = roman.split("")
+    val s = p.subList(1, p.size - 1)
+    try {
+        for (i in s.indices) {
+            val pres = m[s[i]]
+            if (i != s.size - 1) {
+                val next = m[s[i + 1]]
+                if (pres!! < next!!) {
+                    num -= pres
+                } else {
+                    num += pres
+                }
+            } else {
+                num += pres!!
+            }
+        }
+        return num
+    } catch (e: Exception) {
+        return -1
+    }
+}
 
 /**
  * Очень сложная (7 баллов)
