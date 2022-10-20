@@ -196,11 +196,11 @@ fun fromRoman(roman: String): Int {
     var num = 0
     val p = roman.split("")
     val s = p.subList(1, p.size - 1)
+    if (roman.isEmpty()) {
+        return -1
+    }
     try {
         for (i in s.indices) {
-            if (s[i] !in m.keys) {
-                return -1
-            }
             val pres = m[s[i]]
             if (i != s.size - 1) {
                 val next = m[s[i + 1]]
