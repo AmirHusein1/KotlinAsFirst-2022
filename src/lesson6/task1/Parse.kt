@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_PARAMETER", "ConvertCallChainIntoSequence")
+@file:Suppress("UNUSED_PARAMETER", "ConvertCallChainIntoSequence", "DEPRECATED_IDENTITY_EQUALS")
 
 package lesson6.task1
 
@@ -165,19 +165,34 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * Все цены должны быть больше нуля либо равны нулю.
  */
 fun mostExpensive(description: String): String {
-    return try {
-        val a = description.split(";")
-        val map = mutableMapOf<String, Double>()
-        for (i in a.indices) {
-            val b = a[i].split(" ").toMutableList()
-            b -= ""
-            map[b[0]] = b[1].toDouble()
-        }
-        val z = map.maxBy { it.value }
-        z.key
-    } catch (e: Exception) {
-        ""
+    val a = description.split(";")
+    val map = mutableMapOf<String, Double>()
+    if (description.isEmpty()) {
+        return ""
     }
+    for (i in a.indices) {
+        val b = a[i].split(" ").toMutableList()
+        b -= ""
+        println(b)
+        if (b.size !== 2 || b[1].toDouble() < 0 || b[0].isEmpty()) {
+            return ""
+        }
+        map[b[0]] = b[1].toDouble()
+    }
+    return map.maxBy { it.value }.key
+//    return try {
+//        val a = description.split(";")
+//        val map = mutableMapOf<String, Double>()
+//        for (i in a.indices) {
+//            val b = a[i].split(" ").toMutableList()
+//            b -= ""
+//            map[b[0]] = b[1].toDouble()
+//        }
+//        val z = map.maxBy { it.value }
+//        z.key
+//    } catch (e: Exception) {
+//        ""
+//    }
 }
 
 /**
