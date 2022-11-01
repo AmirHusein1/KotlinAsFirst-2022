@@ -197,7 +197,7 @@ fun fromRoman(roman: String): Int {
     var num = 0
     val p = roman.split("")
     val s = p.subList(1, p.size - 1)
-    if (roman.isEmpty() || s[s.size - 1] !in m.keys) {
+    if (roman.isEmpty() || s[s.size - 1] !in m.keys || (s.size > 1 && s[1] !in m.keys)) {
         return -1
     }
     for (i in s.indices) {
