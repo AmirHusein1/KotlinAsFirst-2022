@@ -170,29 +170,15 @@ fun mostExpensive(description: String): String {
     if (description.isEmpty()) {
         return ""
     }
-    for (i in a.indices) {
-        val b = a[i].split(" ").toMutableList()
-        b -= ""
+    for (item in a) {
+        val b = item.trim().split(" ").toMutableList()
         println(b)
-        if (b.size !== 2 || b[1].toDouble() < 0 || b[0].isEmpty()) {
+        if (b.size != 2 || b[1].toDoubleOrNull()!! < 0 || b[0].isEmpty()) {
             return ""
         }
         map[b[0]] = b[1].toDouble()
     }
     return map.maxBy { it.value }.key
-//    return try {
-//        val a = description.split(";")
-//        val map = mutableMapOf<String, Double>()
-//        for (i in a.indices) {
-//            val b = a[i].split(" ").toMutableList()
-//            b -= ""
-//            map[b[0]] = b[1].toDouble()
-//        }
-//        val z = map.maxBy { it.value }
-//        z.key
-//    } catch (e: Exception) {
-//        ""
-//    }
 }
 
 /**
@@ -214,24 +200,23 @@ fun fromRoman(roman: String): Int {
     if (roman.isEmpty()) {
         return -1
     }
-    try {
-        for (i in s.indices) {
-            val pres = m[s[i]]
-            if (i != s.size - 1) {
-                val next = m[s[i + 1]]
-                if (pres!! < next!!) {
-                    num -= pres
-                } else {
-                    num += pres
-                }
-            } else {
-                num += pres!!
-            }
+    for (i in s.indices) {
+        if (s[i] !in m.keys) {
+            return -1
         }
-        return num
-    } catch (e: Exception) {
-        return -1
+        val pres = m[s[i]]
+        if (i != s.size - 1) {
+            val next = m[s[i + 1]]
+            if (pres!! < next!!) {
+                num -= pres
+            } else {
+                num += pres
+            }
+        } else {
+            num += pres!!
+        }
     }
+    return num
 }
 
 /**
