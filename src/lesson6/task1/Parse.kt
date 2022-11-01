@@ -201,7 +201,6 @@ fun fromRoman(roman: String): Int {
         return -1
     }
     for (i in s.indices) {
-        println(s[i])
         if (s[i] !in m.keys) {
             return -1
         }
