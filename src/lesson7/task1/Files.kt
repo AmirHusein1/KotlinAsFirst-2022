@@ -287,9 +287,10 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     fun replaceSym(sym: String, firstTag: String, secTag: String, l: String): String {
         val listSym = mutableListOf<String>()
         val p = l.split(sym)
+        val half = p.size / 2
         listSym.add(p[0])
         for (i in 1 until p.size) {
-            if (i % 2 == 1) {
+            if (i <= half) {
                 listSym.add(firstTag)
             } else {
                 listSym.add(secTag)
