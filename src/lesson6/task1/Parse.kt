@@ -172,11 +172,11 @@ fun mostExpensive(description: String): String {
     }
     for (item in a) {
         val b = item.trim().split(" ").toMutableList()
-        println(b)
-        if (b.size != 2 || b[1].toDoubleOrNull()!! < 0 || b[0].isEmpty()) {
+        val p = b[1].toDoubleOrNull() ?: return ""
+        if (b.size != 2 || b[0].isEmpty()) {
             return ""
         }
-        map[b[0]] = b[1].toDouble()
+        map[b[0]] = p
     }
     return map.maxBy { it.value }.key
 }
@@ -193,27 +193,23 @@ fun mostExpensive(description: String): String {
  * Вернуть -1, если roman не является корректным римским числом
  */
 fun fromRoman(roman: String): Int {
-    val m = mapOf("M" to 1000, "D" to 500, "C" to 100, "L" to 50, "X" to 10, "V" to 5, "I" to 1)
+    val m = mapOf('M' to 1000, 'D' to 500, 'C' to 100, 'L' to 50, 'X' to 10, 'V' to 5, 'I' to 1)
     var num = 0
-    val p = roman.split("")
-    val s = p.subList(1, p.size - 1)
-    if (roman.isEmpty() || s[s.size - 1] !in m.keys || (s.size > 1 && s[1] !in m.keys)) {
+    val s = roman.toList()
+    if (roman.isEmpty()) {
         return -1
     }
     for (i in s.indices) {
-        if (s[i] !in m.keys) {
-            return -1
-        }
-        val pres = m[s[i]]
+        val pres = m[s[i]] ?: return -1
         if (i != s.size - 1) {
-            val next = m[s[i + 1]]
-            if (pres!! < next!!) {
+            val next = m[s[i + 1]] ?: return -1
+            if (pres < next) {
                 num -= pres
             } else {
                 num += pres
             }
         } else {
-            num += pres!!
+            num += pres
         }
     }
     return num
