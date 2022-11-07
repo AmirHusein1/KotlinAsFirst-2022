@@ -282,34 +282,34 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    val a = File(outputName).bufferedWriter()
-    a.write("<html><body><p>")
-    fun replaceSym(sym: String, firstTag: String, secTag: String, l: String): String {
-        val listSym = mutableListOf<String>()
-        val p = l.split(sym)
-        listSym.add(p[0])
-        for (i in 1 until p.size) {
-            if (i % 2 == 1) {
-                listSym.add(firstTag)
-            } else {
-                listSym.add(secTag)
+    File(outputName).bufferedWriter().use {
+        it.write("<html><body><p>")
+        fun replaceSym(sym: String, firstTag: String, secTag: String, l: String): String {
+            val listSym = mutableListOf<String>()
+            val p = l.split(sym)
+            listSym.add(p[0])
+            for (i in 1 until p.size) {
+                if (i % 2 == 1) {
+                    listSym.add(firstTag)
+                } else {
+                    listSym.add(secTag)
+                }
+                listSym.add(p[i])
             }
-            listSym.add(p[i])
+            return listSym.joinToString("")
         }
-        return listSym.joinToString("")
-    }
-    for (line in File(inputName).readLines()) {
-        if (line.isEmpty()) {
-            a.write("</p><p>")
-        } else {
-            val b = replaceSym("**", "<b>", "</b>", line)
-            val c = replaceSym("*", "<i>", "</i>", b)
-            val d = replaceSym("~~", "<s>", "</s>", c)
-            a.write(d)
+        for (line in File(inputName).readLines()) {
+            if (line.isEmpty()) {
+                it.write("</p><p>")
+            } else {
+                val b = replaceSym("**", "<b>", "</b>", line)
+                val c = replaceSym("*", "<i>", "</i>", b)
+                val d = replaceSym("~~", "<s>", "</s>", c)
+                it.write(d)
+            }
         }
+        it.write("</p></body></html>")
     }
-    a.write("</p></body></html>")
-    a.close()
 }
 
 /**
@@ -410,60 +410,69 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlLists(inputName: String, outputName: String) {
-    val a = File(outputName).bufferedWriter()
-    val p = mutableListOf<String>()
-    var prevSpace = 0
-    a.write("<html><body><p>")
-    if ("*" in File(inputName).readLines()[0]) {
-        a.write("<ul><li>${File(inputName).readLines()[0].split("*")[1]}")
-        p.add("</ul>")
-    } else {
-        a.write("<ol><li>${File(inputName).readLines()[0].split("[0-9]*[.]".toRegex())[1]}")
-        p.add("</ol>")
-    }
-    for (i in 1 until  File(inputName).readLines().size) {
-        if ("*" in File(inputName).readLines()[i]) {
-            val m = File(inputName).readLines()[i].split("*")
-            if (m[0].length == prevSpace) {
-                a.write("</li><li>${m[1]}")
-            } else if (m[0].length > prevSpace) {
-                a.write("<ul><li>${m[1]}")
+    File(outputName).bufferedWriter().use {
+        val c = File(inputName).readLines()
+        val p = mutableListOf<String>()
+        var prevSpace = 0
+        it.write("<html><body><p>")
+        var num = 0
+        while (num < c.size) {
+            if (c[num].isEmpty()) {
+                num++
+                it.newLine()
+            } else if ("*" in c[num]) {
+                it.write("<ul><li>${c[num].split("*")[1]}")
                 p.add("</ul>")
+                break
             } else {
-                val t = prevSpace - m[0].length
-                val x = t / 4
-                for (l in 0 until x) {
-                    a.write("</li>${p.last()}")
-                    p.removeLast()
-                }
-                a.write("</li><li>${m[1]}")
-            }
-            prevSpace = m[0].length
-        } else {
-            val m = File(inputName).readLines()[i].split("[0-9]*[.]".toRegex())
-            if (m[0].length == prevSpace) {
-                a.write("</li><li>${m[1]}")
-            } else if (m[0].length > prevSpace) {
-                a.write("<ol><li>${m[1]}")
+                it.write("<ol><li>${c[num].split("[0-9]*[.]".toRegex())[1]}")
                 p.add("</ol>")
-            } else {
-                val t = prevSpace - m[0].length
-                val x = t / 4
-                for (l in 0 until x) {
-                    a.write("</li>${p.last()}")
-                    p.removeLast()
-                }
-                a.write("</li><li>${m[1]}")
+                break
             }
-            prevSpace = m[0].length
         }
+        for (i in num + 1 until c.size) {
+            if ("*" in c[i]) {
+                val m = c[i].split("*")
+                if (m[0].length == prevSpace) {
+                    it.write("</li><li>${m[1]}")
+                } else if (m[0].length > prevSpace) {
+                    it.write("<ul><li>${m[1]}")
+                    p.add("</ul>")
+                } else {
+                    val t = prevSpace - m[0].length
+                    val x = t / 4
+                    for (l in 0 until x) {
+                        it.write("</li>${p.last()}")
+                        p.removeLast()
+                    }
+                    it.write("</li><li>${m[1]}")
+                }
+                prevSpace = m[0].length
+            } else {
+                val m = c[i].split("[0-9]*[.]".toRegex())
+                if (m[0].length == prevSpace) {
+                    it.write("</li><li>${m[1]}")
+                } else if (m[0].length > prevSpace) {
+                    it.write("<ol><li>${m[1]}")
+                    p.add("</ol>")
+                } else {
+                    val t = prevSpace - m[0].length
+                    val x = t / 4
+                    for (l in 0 until x) {
+                        it.write("</li>${p.last()}")
+                        p.removeLast()
+                    }
+                    it.write("</li><li>${m[1]}")
+                }
+                prevSpace = m[0].length
+            }
+        }
+        p.reverse()
+        for (i in p) {
+            it.write("</li>$i")
+        }
+        it.write("</p></body></html>")
     }
-    p.reverse()
-    for (i in p) {
-        a.write("</li>$i")
-    }
-    a.write("</p></body></html>")
-    a.close()
 }
 
 /**

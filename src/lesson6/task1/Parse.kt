@@ -171,7 +171,7 @@ fun mostExpensive(description: String): String {
         return ""
     }
     for (item in a) {
-        val b = item.trim().split(" ").toMutableList()
+        val b = item.trim().split(" ").toList()
         val p = b[1].toDoubleOrNull() ?: return ""
         if (b.size != 2 || b[0].isEmpty()) {
             return ""
