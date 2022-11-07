@@ -283,6 +283,7 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     File(outputName).bufferedWriter().use {
+        val file = File(inputName).readLines()
         it.write("<html><body><p>")
         val arr = mutableListOf(true, true, true)
         fun replaceSym(sym: String, firstTag: String, secTag: String, l: String, int: Int): String {
@@ -300,11 +301,11 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             }
             return listSym.joinToString("")
         }
-        for (line in File(inputName).readLines()) {
-            if (line.isEmpty()) {
+        for (line in file.indices) {
+            if (file[line].isEmpty() && (line == 0 || file[line - 1].isNotEmpty())) {
                 it.write("</p><p>")
-            } else {
-                val b = replaceSym("**", "<b>", "</b>", line, 0)
+            } else if (file[line].isNotEmpty()) {
+                val b = replaceSym("**", "<b>", "</b>", file[line], 0)
                 val c = replaceSym("*", "<i>", "</i>", b, 1)
                 val d = replaceSym("~~", "<s>", "</s>", c, 2)
                 it.write(d)
