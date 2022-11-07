@@ -302,9 +302,11 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             return listSym.joinToString("")
         }
         for (line in file.indices) {
-            if (file[line].isEmpty() && line != 0 && file[line - 1].isNotEmpty() && line != file.size - 1) {
+            if (file[line].trim().isEmpty() && line != 0 &&
+                file[line - 1].trim().isNotEmpty() && line != file.size - 1
+            ) {
                 it.write("</p><p>")
-            } else if (file[line].isNotEmpty()) {
+            } else if (file[line].trim().isNotEmpty()) {
                 val b = replaceSym("**", "<b>", "</b>", file[line], 0)
                 val c = replaceSym("*", "<i>", "</i>", b, 1)
                 val d = replaceSym("~~", "<s>", "</s>", c, 2)
@@ -418,56 +420,38 @@ fun markdownToHtmlLists(inputName: String, outputName: String) {
         val p = mutableListOf<String>()
         var prevSpace = 0
         it.write("<html><body><p>")
-        var num = 0
-        while (num < c.size) {
-            if (c[num].isEmpty()) {
-                num++
-                it.newLine()
-            } else if ("*" in c[num]) {
-                it.write("<ul><li>${c[num].split("*")[1]}")
-                p.add("</ul>")
-                break
-            } else {
-                it.write("<ol><li>${c[num].split("[0-9]*[.]".toRegex())[1]}")
-                p.add("</ol>")
-                break
-            }
+        if (c[0].isEmpty()) {
+            it.newLine()
+        } else if (c[0].matches("[0-9]*[.]".toRegex())){
+            it.write("<ol><li>${c[0].split("[0-9]*[.]".toRegex())[1]}")
+            p.add("</ol>")
+        } else {
+            it.write("<ul><li>${c[0].split("*")[1]}")
+            p.add("</ul>")
         }
-        for (i in num + 1 until c.size) {
-            if ("*" in c[i]) {
-                val m = c[i].split("*")
-                if (m[0].length == prevSpace) {
-                    it.write("</li><li>${m[1]}")
-                } else if (m[0].length > prevSpace) {
-                    it.write("<ul><li>${m[1]}")
-                    p.add("</ul>")
-                } else {
-                    val t = prevSpace - m[0].length
-                    val x = t / 4
-                    for (l in 0 until x) {
-                        it.write("</li>${p.last()}")
-                        p.removeLast()
-                    }
-                    it.write("</li><li>${m[1]}")
-                }
-                prevSpace = m[0].length
+        fun addTag(str: String, firstTag: String, secondTag: String, spl: Regex) {
+            val m = str.split(spl)
+            if (m[0].length == prevSpace) {
+                it.write("</li><li>${m[1]}")
+            } else if (m[0].length > prevSpace) {
+                it.write("${firstTag}<li>${m[1]}")
+                p.add(secondTag)
             } else {
-                val m = c[i].split("[0-9]*[.]".toRegex())
-                if (m[0].length == prevSpace) {
-                    it.write("</li><li>${m[1]}")
-                } else if (m[0].length > prevSpace) {
-                    it.write("<ol><li>${m[1]}")
-                    p.add("</ol>")
-                } else {
-                    val t = prevSpace - m[0].length
-                    val x = t / 4
-                    for (l in 0 until x) {
-                        it.write("</li>${p.last()}")
-                        p.removeLast()
-                    }
-                    it.write("</li><li>${m[1]}")
+                val t = prevSpace - m[0].length
+                val x = t / 4
+                for (l in 0 until x) {
+                    it.write("</li>${p.last()}")
+                    p.removeLast()
                 }
-                prevSpace = m[0].length
+                it.write("</li><li>${m[1]}")
+            }
+            prevSpace = m[0].length
+        }
+        for (i in 1 until c.size) {
+            if ("*" in c[i]) {
+                addTag(c[i], "<ul>", "</ul>", "[*]".toRegex())
+            } else {
+                addTag(c[i], "<ol>", "</ol>", "[0-9]*[.]".toRegex())
             }
         }
         p.reverse()
