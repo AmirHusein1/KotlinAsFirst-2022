@@ -302,7 +302,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             return listSym.joinToString("")
         }
         for (line in file.indices) {
-            if (file[line].isEmpty() && line != 0 && file[line - 1].isNotEmpty()) {
+            if (file[line].isEmpty() && line != 0 && file[line - 1].isNotEmpty() && line != file.size - 1) {
                 it.write("</p><p>")
             } else if (file[line].isNotEmpty()) {
                 val b = replaceSym("**", "<b>", "</b>", file[line], 0)
