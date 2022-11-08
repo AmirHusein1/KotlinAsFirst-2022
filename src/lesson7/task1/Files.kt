@@ -422,10 +422,10 @@ fun markdownToHtmlLists(inputName: String, outputName: String) {
         it.write("<html><body><p>")
         if (c[0].isEmpty()) {
             it.newLine()
-        } else if (c[0].matches("[0-9]*[.]".toRegex())){
+        } else if (c[0].matches("[0-9]*[.]".toRegex()) && "*" !in c[0]) {
             it.write("<ol><li>${c[0].split("[0-9]*[.]".toRegex())[1]}")
             p.add("</ol>")
-        } else {
+        } else if ("*" in c[0] && !(c[0].matches("[0-9]*[.]".toRegex()))) {
             it.write("<ul><li>${c[0].split("*")[1]}")
             p.add("</ul>")
         }
